@@ -1,8 +1,7 @@
 <?php
 
-use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\BarangController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -13,9 +12,9 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/teacher', function () {
-    return view('teacher.teacher');
-})->middleware(['auth', 'verified'])->name('teacher');
+Route::get('/barang', function () {
+    return view('barang.barang');
+})->middleware(['auth', 'verified'])->name('barang');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -23,46 +22,25 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// create group route teacher
-Route::prefix('/teacher')->group(function () {
+// create group route barang
+Route::prefix('/barang')->group(function () {
 
-    // Show all Teacher
-    Route::get('/', [TeacherController::class, 'index']);
-    
-    // Add Teacher
-    Route::get('/add', function () {
-        return view('teacher.teacher-add');
-    });  
+    // Show all Barang
+    Route::get('/', [BarangController::class, 'index']);
 
-    Route::post('/add', [TeacherController::class, 'store']);
+    // Add Barang
+    Route::get('/add', [BarangController::class, 'storeView']);
 
-    // Edit Teacher
-    Route::get('/edit/{id}', [TeacherController::class, 'edit']);
+    Route::post('/add', [BarangController::class, 'store']);
 
-    Route::put('/edit/{id}', [TeacherController::class, 'update']);
-    
-    // Delete Teacher
-    Route::get('/delete/{id}', [TeacherController::class, 'delete']);
-    Route::delete('/delete/{id}', [TeacherController::class, 'destroy']);
+    // Edit Barang
+    Route::get('/edit/{id}', [BarangController::class, 'editView']);
+
+    Route::put('/edit/{id}', [BarangController::class, 'edit']);
+
+    // Delete Barang
+    Route::get('/delete/{id}', [BarangController::class, 'deleteView']);
+    Route::delete('/delete/{id}', [BarangController::class, 'delete']);
 });
 
-Route::prefix('/classroom')->group(function () {
-
-    // show all classroom
-    Route::get('/', [ClassroomController::class, 'index']);
-
-    // add classroom
-    Route::get('/add', [ClassroomController::class,'create']);
-    Route::post('/add', [ClassroomController::class,'store']);
-    Route::get('/detail/{id}', [ClassroomController::class,'detail']);
-
-    // edit classroom
-    Route::get('/edit/{id}', [ClassroomController::class,'edit']);
-    Route::put('/edit/{id}', [ClassroomController::class,'update']);
-
-    // delete classroom
-    Route::get('/delete/{id}', [ClassroomController::class,'delete']);
-    Route::delete('/delete/{id}', [ClassroomController::class,'destroy']);
-});
-
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
